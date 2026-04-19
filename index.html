@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nhóm 3 - Đặt đồ uống cà phê</title>
+    <title>Tạp hóa Nhóm 3 - Đặt hàng online</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="site-header">
       <nav class="navbar">
-        <a class="brand" href="#home" aria-label="Nhóm 3">
+        <a class="brand" href="#home" aria-label="Tạp hóa Nhóm 3">
           <span class="brand-mark">N3</span>
-          <span>Nhóm 3</span>
+          <span>Tạp hóa Nhóm 3</span>
         </a>
         <div class="nav-actions">
-          <a href="#menu">Menu</a>
+          <a href="#products">Sản phẩm</a>
           <a href="#tracking">Tra cứu đơn</a>
           <a href="admin.html">Admin</a>
           <button class="cart-button" id="openCart" type="button">
@@ -26,30 +26,29 @@
     </header>
 
     <main>
-      <section class="hero" id="home">
-        <div class="hero-overlay"></div>
+      <section class="hero grocery-hero" id="home">
         <div class="hero-content">
-          <p class="eyebrow">Đặt đồ uống online</p>
-          <h1>Nhóm 3</h1>
+          <p class="eyebrow">Website tạp hóa thương mại</p>
+          <h1>Tạp hóa Nhóm 3</h1>
           <p>
-            Chọn đồ uống yêu thích, đặt nhanh bằng thông tin giao hàng và theo
-            dõi trạng thái đơn ngay trên web.
+            Mua nhanh đồ uống, bánh kẹo, gia vị và mì ăn liền. Hệ thống mô phỏng
+            đặt hàng, trừ tồn kho, theo dõi trạng thái và quản lý đơn theo SQL Server.
           </p>
           <div class="hero-actions">
-            <a class="primary-link" href="#menu">Xem menu</a>
+            <a class="primary-link" href="#products">Xem sản phẩm</a>
             <a class="secondary-link" href="#checkout">Đặt hàng</a>
           </div>
         </div>
       </section>
 
-      <section class="section shell" id="menu">
+      <section class="section shell" id="products">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Menu đồ uống</p>
-            <h2>Chọn món</h2>
+            <p class="eyebrow">Danh mục hàng hóa</p>
+            <h2>Chọn mặt hàng</h2>
           </div>
           <div class="search-box">
-            <input id="searchInput" type="search" placeholder="Tìm tên món" />
+            <input id="searchInput" type="search" placeholder="Tìm tên hàng" />
           </div>
         </div>
 
@@ -60,31 +59,31 @@
       <section class="section checkout-section" id="checkout">
         <div class="shell checkout-layout">
           <div>
-            <p class="eyebrow">Thông tin giao hàng</p>
+            <p class="eyebrow">Thông tin đơn hàng</p>
             <h2>Hoàn tất đặt hàng</h2>
             <form class="checkout-form" id="checkoutForm">
               <label>
-                Họ tên
-                <input name="customerName" required type="text" placeholder="Nguyen Van A" />
+                Họ tên khách hàng
+                <input name="customerName" required type="text" placeholder="Nguyễn Văn An" />
               </label>
               <label>
                 Số điện thoại
                 <input name="phone" required type="tel" placeholder="0901234567" />
               </label>
               <label>
-                Địa chỉ giao hàng
-                <textarea name="address" required rows="3" placeholder="Số nhà, đường, phường/xã"></textarea>
-              </label>
-              <label>
-                Phương thức thanh toán
-                <select name="paymentMethod">
-                  <option value="COD">Thanh toán khi nhận hàng</option>
-                  <option value="Chuyển khoản">Chuyển khoản</option>
+                Hình thức nhận hàng
+                <select name="receiveType" id="receiveType">
+                  <option value="giao_hang">Giao hàng tận nơi</option>
+                  <option value="tu_den">Khách tự đến lấy</option>
                 </select>
               </label>
               <label>
-                Ghi chú
-                <textarea name="note" rows="2" placeholder="Ít đá, ít đường, gọi trước khi giao..."></textarea>
+                Giờ nhận dự kiến
+                <input name="receiveTime" type="datetime-local" />
+              </label>
+              <label id="addressField">
+                Địa chỉ giao hàng
+                <textarea name="address" rows="3" placeholder="Số nhà, đường, phường/xã"></textarea>
               </label>
               <button class="primary-button" type="submit">Xác nhận đặt hàng</button>
             </form>
@@ -95,15 +94,11 @@
             <div id="checkoutItems" class="summary-list"></div>
             <div class="summary-row">
               <span>Tạm tính</span>
-              <strong id="subtotalText">0 d</strong>
-            </div>
-            <div class="summary-row">
-              <span>Phí giao hàng</span>
-              <strong id="shippingText">0 d</strong>
+              <strong id="subtotalText">0 đ</strong>
             </div>
             <div class="summary-row total">
-              <span>Thành tiền</span>
-              <strong id="totalText">0 d</strong>
+              <span>Tổng tiền</span>
+              <strong id="totalText">0 đ</strong>
             </div>
           </aside>
         </div>
@@ -117,7 +112,7 @@
           </div>
         </div>
         <form class="tracking-form" id="trackingForm">
-          <input name="orderCode" type="text" placeholder="Nhập mã đơn ví dụ N31024" />
+          <input name="orderCode" type="text" placeholder="Nhập mã đơn ví dụ DH1001" />
           <button class="secondary-button" type="submit">Tra cứu</button>
         </form>
         <div id="trackingResult" class="tracking-result"></div>
@@ -133,13 +128,12 @@
       <div class="cart-footer">
         <div class="summary-row total">
           <span>Tổng tạm tính</span>
-          <strong id="cartSubtotal">0 d</strong>
+          <strong id="cartSubtotal">0 đ</strong>
         </div>
         <a class="primary-link full" href="#checkout" id="checkoutLink">Đặt hàng</a>
       </div>
     </aside>
     <div class="backdrop" id="backdrop"></div>
-
     <div class="toast" id="toast"></div>
 
     <script src="data.js"></script>

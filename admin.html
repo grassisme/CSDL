@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin - Nhóm 3</title>
+    <title>Admin - Tạp hóa Nhóm 3</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="admin-body">
@@ -11,12 +11,12 @@
       <nav class="navbar">
         <a class="brand" href="index.html">
           <span class="brand-mark">N3</span>
-          <span>Nhóm 3 Admin</span>
+          <span>Quản trị tạp hóa</span>
         </a>
         <div class="nav-actions">
           <a href="index.html">Trang khách</a>
           <a href="#orders">Đơn hàng</a>
-          <a href="#products">Sản phẩm</a>
+          <a href="#inventory">Tồn kho</a>
         </div>
       </nav>
     </header>
@@ -25,16 +25,16 @@
       <section class="admin-hero">
         <div>
           <p class="eyebrow">Bảng điều khiển</p>
-          <h1>Quản lý đặt đồ uống online</h1>
+          <h1>Quản lý tạp hóa thương mại</h1>
         </div>
         <div class="admin-login">
           <label>
-            Tài khoản admin
-            <input value="admin" readonly />
+            Cơ sở dữ liệu
+            <input value="bai_tap_lon_csdl" readonly />
           </label>
           <label>
-            Mật khẩu demo
-            <input value="123456" readonly />
+            Luồng chính
+            <input value="Đặt hàng - trừ kho - cập nhật trạng thái" readonly />
           </label>
         </div>
       </section>
@@ -44,16 +44,15 @@
       <section class="admin-section" id="orders">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Xử lý đơn</p>
+            <p class="eyebrow">Bảng ORDERS</p>
             <h2>Đơn hàng gần đây</h2>
           </div>
           <select id="statusFilter">
             <option value="all">Tất cả trạng thái</option>
-            <option value="Chờ xác nhận">Chờ xác nhận</option>
-            <option value="Đang chuẩn bị">Đang chuẩn bị</option>
-            <option value="Đang giao">Đang giao</option>
-            <option value="Hoàn thành">Hoàn thành</option>
-            <option value="Đã hủy">Đã hủy</option>
+            <option value="cho">Chờ xử lý</option>
+            <option value="dang_giao">Đang giao</option>
+            <option value="xong">Hoàn thành</option>
+            <option value="huy">Đã hủy</option>
           </select>
         </div>
         <div class="table-wrap">
@@ -62,7 +61,8 @@
               <tr>
                 <th>Mã đơn</th>
                 <th>Khách hàng</th>
-                <th>SDT</th>
+                <th>Hình thức</th>
+                <th>Giờ nhận</th>
                 <th>Tổng tiền</th>
                 <th>Trạng thái</th>
                 <th>Cập nhật</th>
@@ -73,11 +73,11 @@
         </div>
       </section>
 
-      <section class="admin-section" id="products">
+      <section class="admin-section" id="inventory">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Menu</p>
-            <h2>Sản phẩm demo</h2>
+            <p class="eyebrow">Bảng PRODUCTS</p>
+            <h2>Sản phẩm và tồn kho</h2>
           </div>
           <button class="secondary-button" id="resetData" type="button">Khôi phục dữ liệu mẫu</button>
         </div>
@@ -85,15 +85,27 @@
           <table>
             <thead>
               <tr>
-                <th>Tên món</th>
-                <th>Danh mục</th>
+                <th>Tên hàng</th>
+                <th>Loại</th>
                 <th>Đơn giá</th>
-                <th>Trạng thái</th>
+                <th>Tồn kho</th>
+                <th>Ngưỡng cảnh báo</th>
+                <th>Đơn vị</th>
               </tr>
             </thead>
             <tbody id="productsTable"></tbody>
           </table>
         </div>
+      </section>
+
+      <section class="admin-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">View vw_CanhBaoTonKho</p>
+            <h2>Hàng sắp hết</h2>
+          </div>
+        </div>
+        <div id="lowStockList" class="warning-list"></div>
       </section>
     </main>
 

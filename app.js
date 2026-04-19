@@ -1,8 +1,7 @@
-const SHIPPING_FEE = 15000;
 let products = getProducts();
 let orders = getOrders();
-let cart = JSON.parse(localStorage.getItem("nhom3_cart") || "[]");
-let activeCategory = "Tất cả";
+let cart = JSON.parse(localStorage.getItem("taphoa_cart") || "[]");
+let activeCategoryId = 0;
 
 const productGrid = document.getElementById("productGrid");
 const categoryTabs = document.getElementById("categoryTabs");
@@ -13,6 +12,8 @@ const cartItems = document.getElementById("cartItems");
 const checkoutItems = document.getElementById("checkoutItems");
 const checkoutForm = document.getElementById("checkoutForm");
 const trackingForm = document.getElementById("trackingForm");
+const receiveType = document.getElementById("receiveType");
+const addressField = document.getElementById("addressField");
 
 function formatMoney(value) {
   return new Intl.NumberFormat("vi-VN").format(value) + " đ";
@@ -26,47 +27,59 @@ function showToast(message) {
 }
 
 function saveCart() {
-  localStorage.setItem("nhom3_cart", JSON.stringify(cart));
+  localStorage.setItem("taphoa_cart", JSON.stringify(cart));
 }
 
 function getCartSubtotal() {
   return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
+function getCartQuantity(productId) {
+  const item = cart.find((cartItem) => cartItem.productId === productId);
+  return item ? item.quantity : 0;
+}
+
 function renderCategories() {
   categoryTabs.innerHTML = CATEGORIES.map(
     (category) =>
-      `<button class="${category === activeCategory ? "active" : ""}" data-category="${category}" type="button">${category}</button>`
+      `<button class="${category.id === activeCategoryId ? "active" : ""}" data-category="${category.id}" type="button">${category.name}</button>`
   ).join("");
 }
 
 function renderProducts() {
   const keyword = searchInput.value.trim().toLowerCase();
   const filtered = products.filter((product) => {
-    const matchCategory = activeCategory === "Tất cả" || product.category === activeCategory;
+    const matchCategory = activeCategoryId === 0 || product.categoryId === activeCategoryId;
     const matchKeyword = product.name.toLowerCase().includes(keyword);
-    return matchCategory && matchKeyword && product.status === "Còn bán";
+    return matchCategory && matchKeyword;
   });
 
   productGrid.innerHTML = filtered
-    .map(
-      (product) => `
+    .map((product) => {
+      const stockClass = product.stock <= product.warningStock ? "stock-warning" : "";
+      const disabled = product.stock <= 0 ? "disabled" : "";
+      const buttonText = product.stock <= 0 ? "Hết hàng" : "Thêm";
+
+      return `
         <article class="product-card">
           <img src="${product.image}" alt="${product.name}" />
           <div class="product-content">
             <div>
-              <span class="pill">${product.category}</span>
+              <span class="pill">${getCategoryName(product.categoryId)}</span>
               <h3>${product.name}</h3>
-              <p>${product.description}</p>
+              <p>Còn ${product.stock} ${product.unit}. Ngưỡng cảnh báo: ${product.warningStock} ${product.unit}.</p>
             </div>
             <div class="product-bottom">
-              <strong>${formatMoney(product.price)}</strong>
-              <button class="secondary-button" type="button" data-add="${product.id}">Thêm</button>
+              <div>
+                <strong>${formatMoney(product.price)}</strong>
+                <span class="stock-text ${stockClass}">Tồn kho: ${product.stock}</span>
+              </div>
+              <button class="secondary-button" type="button" data-add="${product.id}" ${disabled}>${buttonText}</button>
             </div>
           </div>
         </article>
-      `
-    )
+      `;
+    })
     .join("");
 }
 
@@ -75,22 +88,21 @@ function renderCart() {
   document.getElementById("cartCount").textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
   document.getElementById("cartSubtotal").textContent = formatMoney(subtotal);
   document.getElementById("subtotalText").textContent = formatMoney(subtotal);
-  document.getElementById("shippingText").textContent = subtotal > 0 ? formatMoney(SHIPPING_FEE) : formatMoney(0);
-  document.getElementById("totalText").textContent = formatMoney(subtotal > 0 ? subtotal + SHIPPING_FEE : 0);
+  document.getElementById("totalText").textContent = formatMoney(subtotal);
 
   if (cart.length === 0) {
     cartItems.innerHTML = '<p class="empty-text">Giỏ hàng đang trống.</p>';
-    checkoutItems.innerHTML = '<p class="empty-text">Chưa có món nào được chọn.</p>';
+    checkoutItems.innerHTML = '<p class="empty-text">Chưa có mặt hàng nào được chọn.</p>';
     return;
   }
 
-  const itemHtml = cart
+  cartItems.innerHTML = cart
     .map(
       (item) => `
         <div class="cart-item">
           <div>
             <strong>${item.name}</strong>
-            <span>${formatMoney(item.price)}</span>
+            <span>${formatMoney(item.price)} / ${item.unit}</span>
           </div>
           <div class="quantity-control">
             <button type="button" data-decrease="${item.productId}">-</button>
@@ -102,7 +114,6 @@ function renderCart() {
     )
     .join("");
 
-  cartItems.innerHTML = itemHtml;
   checkoutItems.innerHTML = cart
     .map(
       (item) => `
@@ -117,8 +128,14 @@ function renderCart() {
 
 function addToCart(productId) {
   const product = products.find((item) => item.id === productId);
-  const existing = cart.find((item) => item.productId === productId);
+  const currentQuantity = getCartQuantity(productId);
 
+  if (currentQuantity >= product.stock) {
+    showToast("Số lượng trong giỏ đã bằng tồn kho hiện có");
+    return;
+  }
+
+  const existing = cart.find((item) => item.productId === productId);
   if (existing) {
     existing.quantity += 1;
   } else {
@@ -126,18 +143,26 @@ function addToCart(productId) {
       productId: product.id,
       name: product.name,
       price: product.price,
+      unit: product.unit,
       quantity: 1,
     });
   }
 
   saveCart();
   renderCart();
-  showToast("Đã thêm món vào giỏ hàng");
+  showToast("Đã thêm mặt hàng vào giỏ hàng");
 }
 
 function updateQuantity(productId, amount) {
   const item = cart.find((cartItem) => cartItem.productId === productId);
-  if (!item) return;
+  const product = products.find((productItem) => productItem.id === productId);
+  if (!item || !product) return;
+
+  if (amount > 0 && item.quantity >= product.stock) {
+    showToast("Không thể chọn vượt quá tồn kho");
+    return;
+  }
+
   item.quantity += amount;
   cart = cart.filter((cartItem) => cartItem.quantity > 0);
   saveCart();
@@ -156,29 +181,61 @@ function closeCart() {
   cartPanel.setAttribute("aria-hidden", "true");
 }
 
+function syncReceiveType() {
+  const isDelivery = receiveType.value === "giao_hang";
+  addressField.style.display = isDelivery ? "grid" : "none";
+  addressField.querySelector("textarea").required = isDelivery;
+}
+
 function createOrder(formData) {
   const subtotal = getCartSubtotal();
+  const type = formData.get("receiveType");
+  const address = formData.get("address").trim();
+
+  if (type === "giao_hang" && !address) {
+    showToast("Đơn giao hàng phải có địa chỉ giao");
+    return;
+  }
+
+  const invalidItem = cart.find((item) => {
+    const product = products.find((productItem) => productItem.id === item.productId);
+    return !product || product.stock < item.quantity;
+  });
+
+  if (invalidItem) {
+    showToast(`Không đủ tồn kho cho mặt hàng ${invalidItem.name}`);
+    return;
+  }
+
+  products = products.map((product) => {
+    const item = cart.find((cartItem) => cartItem.productId === product.id);
+    return item ? { ...product, stock: product.stock - item.quantity } : product;
+  });
+
+  const nextId = orders.length ? Math.max(...orders.map((order) => order.id)) + 1 : 1;
   const newOrder = {
-    code: "N3" + Math.floor(1000 + Math.random() * 9000),
-    customerName: formData.get("customerName"),
-    phone: formData.get("phone"),
-    address: formData.get("address"),
-    paymentMethod: formData.get("paymentMethod"),
-    note: formData.get("note"),
-    status: "Chờ xác nhận",
+    id: nextId,
+    code: "DH" + String(1000 + nextId),
+    customerName: formData.get("customerName").trim(),
+    phone: formData.get("phone").trim(),
     createdAt: new Date().toLocaleString("vi-VN"),
+    receiveType: type,
+    receiveTime: formData.get("receiveTime") || "",
+    address,
+    status: "cho",
     items: cart,
-    subtotal,
-    shippingFee: SHIPPING_FEE,
-    total: subtotal + SHIPPING_FEE,
+    total: subtotal,
   };
 
   orders = [newOrder, ...orders];
+  saveProducts(products);
   saveOrders(orders);
   cart = [];
   saveCart();
+  renderProducts();
   renderCart();
   checkoutForm.reset();
+  syncReceiveType();
   showToast(`Đặt hàng thành công. Mã đơn: ${newOrder.code}`);
 }
 
@@ -192,9 +249,10 @@ function renderTracking(order) {
   result.innerHTML = `
     <div class="tracking-card">
       <div>
-        <span class="pill">${order.status}</span>
+        <span class="pill">${getStatusLabel(order.status)}</span>
         <h3>${order.code}</h3>
         <p>${order.customerName} - ${order.phone}</p>
+        <p>${getReceiveTypeLabel(order.receiveType)}${order.receiveTime ? " - " + order.receiveTime : ""}</p>
       </div>
       <strong>${formatMoney(order.total)}</strong>
     </div>
@@ -204,14 +262,14 @@ function renderTracking(order) {
 categoryTabs.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-category]");
   if (!button) return;
-  activeCategory = button.dataset.category;
+  activeCategoryId = Number(button.dataset.category);
   renderCategories();
   renderProducts();
 });
 
 productGrid.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-add]");
-  if (!button) return;
+  if (!button || button.disabled) return;
   addToCart(Number(button.dataset.add));
 });
 
@@ -223,6 +281,7 @@ cartItems.addEventListener("click", (event) => {
 });
 
 searchInput.addEventListener("input", renderProducts);
+receiveType.addEventListener("change", syncReceiveType);
 document.getElementById("openCart").addEventListener("click", openCart);
 document.getElementById("closeCart").addEventListener("click", closeCart);
 document.getElementById("backdrop").addEventListener("click", closeCart);
@@ -231,7 +290,7 @@ document.getElementById("checkoutLink").addEventListener("click", closeCart);
 checkoutForm.addEventListener("submit", (event) => {
   event.preventDefault();
   if (cart.length === 0) {
-    showToast("Vui lòng chọn món trước khi đặt hàng");
+    showToast("Vui lòng chọn mặt hàng trước khi đặt hàng");
     return;
   }
   createOrder(new FormData(checkoutForm));
@@ -244,6 +303,7 @@ trackingForm.addEventListener("submit", (event) => {
   renderTracking(order);
 });
 
+syncReceiveType();
 renderCategories();
 renderProducts();
 renderCart();

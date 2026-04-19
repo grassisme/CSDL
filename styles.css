@@ -146,6 +146,12 @@ img {
   border-color: var(--line);
 }
 
+.secondary-button:disabled {
+  cursor: not-allowed;
+  color: var(--muted);
+  background: #eee9e2;
+}
+
 .hero {
   position: relative;
   min-height: 620px;
@@ -154,6 +160,13 @@ img {
   background:
     linear-gradient(90deg, rgba(25, 18, 12, 0.82), rgba(25, 18, 12, 0.22)),
     url("https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1800&q=80")
+      center/cover;
+}
+
+.grocery-hero {
+  background:
+    linear-gradient(90deg, rgba(19, 28, 21, 0.84), rgba(19, 28, 21, 0.2)),
+    url("https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1800&q=80")
       center/cover;
 }
 
@@ -334,6 +347,21 @@ td select {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
+}
+
+.product-bottom > div {
+  display: grid;
+  gap: 4px;
+}
+
+.stock-text {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.stock-warning {
+  color: var(--danger);
 }
 
 .checkout-section {
@@ -573,7 +601,7 @@ label select,
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -624,6 +652,43 @@ th {
 
 tr:last-child td {
   border-bottom: 0;
+}
+
+.muted-cell {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.low-stock-row {
+  background: #fff7ed;
+}
+
+.warning-list {
+  display: grid;
+  gap: 12px;
+}
+
+.warning-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px;
+  border: 1px solid #f0c8a8;
+  border-radius: 8px;
+  background: #fff7ed;
+}
+
+.warning-item strong,
+.warning-item span {
+  display: block;
+}
+
+.warning-item span,
+.warning-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 @media (max-width: 900px) {

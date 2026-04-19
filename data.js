@@ -1,139 +1,180 @@
-const CATEGORIES = ["Tất cả", "Cà phê", "Trà", "Đá xay", "Bánh"];
+const CATEGORIES = [
+  { id: 0, name: "Tất cả" },
+  { id: 1, name: "Đồ uống" },
+  { id: 2, name: "Bánh kẹo" },
+  { id: 3, name: "Gia vị" },
+  { id: 4, name: "Mì - Cháo ăn liền" },
+];
 
 const PRODUCTS = [
   {
     id: 1,
-    name: "Cà phê sữa đá",
-    category: "Cà phê",
-    price: 29000,
-    description: "Cà phê rang xay, sữa đặc và đá viên.",
+    categoryId: 1,
+    name: "Nước suối Lavie 500ml",
+    price: 5000,
+    stock: 95,
+    warningStock: 10,
+    unit: "chai",
     image:
-      "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80",
-    status: "Còn bán",
+      "https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 2,
-    name: "Bạc xỉu",
-    category: "Cà phê",
-    price: 32000,
-    description: "Sữa tươi béo nhẹ, vị cà phê dịu.",
+    categoryId: 1,
+    name: "Coca Cola 330ml lon",
+    price: 12000,
+    stock: 47,
+    warningStock: 8,
+    unit: "lon",
     image:
-      "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=80",
-    status: "Còn bán",
+      "https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 3,
-    name: "Americano đá",
-    category: "Cà phê",
-    price: 35000,
-    description: "Espresso pha cùng nước lạnh, vị mạnh gọn.",
+    categoryId: 2,
+    name: "Bánh quy Marie",
+    price: 18000,
+    stock: 28,
+    warningStock: 5,
+    unit: "gói",
     image:
-      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
-    status: "Còn bán",
+      "https://images.unsplash.com/photo-1590080875852-ba44f83ff2db?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 4,
-    name: "Trà đào cam sả",
-    category: "Trà",
-    price: 39000,
-    description: "Trà đen, đào miếng, cam vàng và sả tươi.",
+    categoryId: 2,
+    name: "Kẹo dừa Bến Tre",
+    price: 25000,
+    stock: 19,
+    warningStock: 5,
+    unit: "hộp",
     image:
-      "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=900&q=80",
-    status: "Còn bán",
+      "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 5,
-    name: "Trà sữa oolong",
-    category: "Trà",
-    price: 42000,
-    description: "Trà oolong thơm, sữa tươi và trân châu.",
+    categoryId: 3,
+    name: "Nước mắm Phú Quốc 500ml",
+    price: 35000,
+    stock: 14,
+    warningStock: 3,
+    unit: "chai",
     image:
-      "https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&w=900&q=80",
-    status: "Còn bán",
+      "https://images.unsplash.com/photo-1606914469633-bd39206ea739?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 6,
-    name: "Matcha đá xay",
-    category: "Đá xay",
-    price: 49000,
-    description: "Bột matcha, sữa tươi và lớp kem mịn.",
+    categoryId: 4,
+    name: "Mì Hảo Hảo tôm chua cay",
+    price: 4000,
+    stock: 190,
+    warningStock: 20,
+    unit: "gói",
     image:
-      "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=900&q=80",
-    status: "Còn bán",
+      "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=900&q=80",
   },
-  {
-    id: 7,
-    name: "Cookie đá xay",
-    category: "Đá xay",
-    price: 52000,
-    description: "Bánh cookie, sữa tươi, cacao và kem.",
-    image:
-      "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=80",
-    status: "Còn bán",
-  },
-  {
-    id: 8,
-    name: "Croissant bơ",
-    category: "Bánh",
-    price: 36000,
-    description: "Bánh croissant lớp mỏng, thơm bơ.",
-    image:
-      "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=80",
-    status: "Còn bán",
-  },
+];
+
+const SAMPLE_CUSTOMERS = [
+  { id: 1, name: "Nguyễn Văn An", phone: "0901234567" },
+  { id: 2, name: "Trần Thị Bích", phone: "0912345678" },
+  { id: 3, name: "Lê Hoàng Minh", phone: "0923456789" },
 ];
 
 const SAMPLE_ORDERS = [
   {
-    code: "N31001",
-    customerName: "Nguyễn Minh Anh",
+    id: 1,
+    code: "DH1001",
+    customerName: "Nguyễn Văn An",
     phone: "0901234567",
-    address: "12 Nguyễn Trãi, Quận 1",
-    paymentMethod: "COD",
-    status: "Đang giao",
-    createdAt: "2026-04-19 08:30",
+    createdAt: "2025-04-20 09:30",
+    receiveType: "giao_hang",
+    receiveTime: "2025-04-20 09:30",
+    address: "12 Trần Hưng Đạo, Hoàn Kiếm, HN",
+    status: "dang_giao",
     items: [
-      { productId: 1, name: "Cà phê sữa đá", quantity: 2, price: 29000 },
-      { productId: 8, name: "Croissant bơ", quantity: 1, price: 36000 },
+      { productId: 1, name: "Nước suối Lavie 500ml", quantity: 5, price: 5000 },
+      { productId: 6, name: "Mì Hảo Hảo tôm chua cay", quantity: 10, price: 4000 },
     ],
-    subtotal: 94000,
-    shippingFee: 15000,
-    total: 109000,
+    total: 65000,
   },
   {
-    code: "N31002",
-    customerName: "Trần Quốc Bảo",
+    id: 2,
+    code: "DH1002",
+    customerName: "Trần Thị Bích",
     phone: "0912345678",
-    address: "45 Lê Lợi, Quận 3",
-    paymentMethod: "Chuyển khoản",
-    status: "Hoàn thành",
-    createdAt: "2026-04-19 09:10",
-    items: [{ productId: 4, name: "Trà đào cam sả", quantity: 1, price: 39000 }],
-    subtotal: 39000,
-    shippingFee: 15000,
-    total: 54000,
+    createdAt: "2025-04-20 14:00",
+    receiveType: "tu_den",
+    receiveTime: "2025-04-20 14:00",
+    address: "",
+    status: "cho",
+    items: [
+      { productId: 3, name: "Bánh quy Marie", quantity: 2, price: 18000 },
+      { productId: 4, name: "Kẹo dừa Bến Tre", quantity: 1, price: 25000 },
+    ],
+    total: 61000,
+  },
+  {
+    id: 3,
+    code: "DH1003",
+    customerName: "Lê Hoàng Minh",
+    phone: "0923456789",
+    createdAt: "2025-04-21 08:00",
+    receiveType: "giao_hang",
+    receiveTime: "2025-04-21 08:00",
+    address: "45 Lý Thường Kiệt, Hai Bà Trưng, HN",
+    status: "xong",
+    items: [
+      { productId: 2, name: "Coca Cola 330ml lon", quantity: 3, price: 12000 },
+      { productId: 5, name: "Nước mắm Phú Quốc 500ml", quantity: 1, price: 35000 },
+    ],
+    total: 71000,
   },
 ];
 
 function getProducts() {
-  const stored = localStorage.getItem("nhom3_products");
+  const stored = localStorage.getItem("taphoa_products");
   if (stored) return JSON.parse(stored);
-  localStorage.setItem("nhom3_products", JSON.stringify(PRODUCTS));
+  localStorage.setItem("taphoa_products", JSON.stringify(PRODUCTS));
   return PRODUCTS;
 }
 
+function saveProducts(products) {
+  localStorage.setItem("taphoa_products", JSON.stringify(products));
+}
+
 function getOrders() {
-  const stored = localStorage.getItem("nhom3_orders");
+  const stored = localStorage.getItem("taphoa_orders");
   if (stored) return JSON.parse(stored);
-  localStorage.setItem("nhom3_orders", JSON.stringify(SAMPLE_ORDERS));
+  localStorage.setItem("taphoa_orders", JSON.stringify(SAMPLE_ORDERS));
   return SAMPLE_ORDERS;
 }
 
 function saveOrders(orders) {
-  localStorage.setItem("nhom3_orders", JSON.stringify(orders));
+  localStorage.setItem("taphoa_orders", JSON.stringify(orders));
 }
 
 function resetDemoData() {
-  localStorage.setItem("nhom3_products", JSON.stringify(PRODUCTS));
-  localStorage.setItem("nhom3_orders", JSON.stringify(SAMPLE_ORDERS));
+  localStorage.setItem("taphoa_products", JSON.stringify(PRODUCTS));
+  localStorage.setItem("taphoa_orders", JSON.stringify(SAMPLE_ORDERS));
+  localStorage.removeItem("taphoa_cart");
+}
+
+function getCategoryName(categoryId) {
+  const category = CATEGORIES.find((item) => item.id === categoryId);
+  return category ? category.name : "Chưa phân loại";
+}
+
+function getStatusLabel(status) {
+  const labels = {
+    cho: "Chờ xử lý",
+    dang_giao: "Đang giao",
+    xong: "Hoàn thành",
+    huy: "Đã hủy",
+  };
+  return labels[status] || status;
+}
+
+function getReceiveTypeLabel(receiveType) {
+  return receiveType === "tu_den" ? "Khách tự đến lấy" : "Giao hàng tận nơi";
 }
