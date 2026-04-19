@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Nhóm 3</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="admin-body">
+    <header class="site-header">
+      <nav class="navbar">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">N3</span>
+          <span>Nhóm 3 Admin</span>
+        </a>
+        <div class="nav-actions">
+          <a href="index.html">Trang khách</a>
+          <a href="#orders">Đơn hàng</a>
+          <a href="#products">Sản phẩm</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="admin-main shell">
+      <section class="admin-hero">
+        <div>
+          <p class="eyebrow">Bảng điều khiển</p>
+          <h1>Quản lý đặt đồ uống online</h1>
+        </div>
+        <div class="admin-login">
+          <label>
+            Tài khoản admin
+            <input value="admin" readonly />
+          </label>
+          <label>
+            Mật khẩu demo
+            <input value="123456" readonly />
+          </label>
+        </div>
+      </section>
+
+      <section class="stats-grid" id="dashboardStats"></section>
+
+      <section class="admin-section" id="orders">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Xử lý đơn</p>
+            <h2>Đơn hàng gần đây</h2>
+          </div>
+          <select id="statusFilter">
+            <option value="all">Tất cả trạng thái</option>
+            <option value="Chờ xác nhận">Chờ xác nhận</option>
+            <option value="Đang chuẩn bị">Đang chuẩn bị</option>
+            <option value="Đang giao">Đang giao</option>
+            <option value="Hoàn thành">Hoàn thành</option>
+            <option value="Đã hủy">Đã hủy</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã đơn</th>
+                <th>Khách hàng</th>
+                <th>SDT</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Cập nhật</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section" id="products">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Menu</p>
+            <h2>Sản phẩm demo</h2>
+          </div>
+          <button class="secondary-button" id="resetData" type="button">Khôi phục dữ liệu mẫu</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tên món</th>
+                <th>Danh mục</th>
+                <th>Đơn giá</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody id="productsTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast"></div>
+    <script src="data.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
